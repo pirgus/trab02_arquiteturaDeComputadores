@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
             results[hist[i]]++;
         }
         double end_time_omp = omp_get_wtime();
-        double cpu_time_used = ((double) (end_time_omp - start_time_omp)) / CLOCKS_PER_SEC;
+        double cpu_time_used = ((double) (end_time_omp - start_time_omp));
         printf("Execution time: %g seconds\n", cpu_time_used);
     }
     
