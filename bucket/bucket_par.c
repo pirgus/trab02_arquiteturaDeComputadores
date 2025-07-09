@@ -1,13 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <omp.h>
+#include <time.h>
 
-#define MAX 1000  // Número de elementos em cada bucket
+#define MAX 100  // Número de elementos em cada bucket
 
 // Função para encontrar o valor máximo em um array
 float findMax(float array[], int n) {
     float max = array[0];
-    #pragma omp parallel for num_threads(8) reduction(max: max)
+    #pragma omp parallel for num_threads(4) reduction(max: max)
     for (int i = 1; i < n; i++) {
         if (array[i] > max) {
             max = array[i];
@@ -33,7 +34,6 @@ void insertionSort(float bucket[], int n) {
 void bucketSort(float array[], int n) {
     // Encontrar o valor máximo no array
     float max = findMax(array, n);
-    printf("max = %f\n", max);
 
     // Inicializar os buckets
     int bucketCount = MAX;
@@ -46,6 +46,7 @@ void bucketSort(float array[], int n) {
     }
 
     // Distribuir os elementos nos buckets
+    // #pragma omp parallel for num_threads(8)
     for (int i = 0; i < n; i++) {
         int index = (array[i] * bucketCount) / (max + 1);
         buckets[index][bucketSizes[index]] = array[i];
@@ -53,7 +54,7 @@ void bucketSort(float array[], int n) {
     }
 
     // Ordenar cada bucket individualmente
-    #pragma omp parallel for num_threads(8)
+    // #pragma omp parallel for num_threads(8)
     for (int i = 0; i < bucketCount; i++) {
         // int id = omp_get_thread_num();
         if (bucketSizes[i] > 0) {
@@ -98,7 +99,7 @@ int readFile(const char *filename, float **array) {
 
 int main() {
     float *array = malloc(sizeof(float) * 1);
-    const char *filename = "in1k.txt";  // Substitua pelo nome do seu arquivo
+    const char *filename = "in10k.txt";  // Substitua pelo nome do seu arquivo
 
     int n = readFile(filename, &array);
     if (n == -1) {
@@ -113,8 +114,8 @@ int main() {
     double end = omp_get_wtime();
     printf("execution time = %lf\n", end - start);
 
-    printf("Array ordenado: \n");
-    printArray(array, n);
+    // printf("Array ordenado: \n");
+    // printArray(array, n);
 
     free(array);
     return 0;

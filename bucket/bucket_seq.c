@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define MAX 1000  // Número de elementos em cada bucket
+#define MAX 100  // Número de elementos em cada bucket
 
 // Função para encontrar o valor máximo em um array
 float findMax(float array[], int n) {
@@ -95,7 +95,7 @@ int readFile(const char *filename, float **array) {
 
 int main() {
     float *array = malloc(sizeof(float) * 1);
-    const char *filename = "in1k.txt";  // Substitua pelo nome do seu arquivo
+    const char *filename = "in10k.txt";  // Substitua pelo nome do seu arquivo
 
     int n = readFile(filename, &array);
     if (n == -1) {
@@ -113,7 +113,7 @@ int main() {
     double time = ((double) (end - start)) / CLOCKS_PER_SEC;
     printf("execution time = %lf\n", time);
 
-    printf("Array ordenado: \n");
+    // printf("Array ordenado: \n");
     // printArray(array, n);
 
     free(array);
