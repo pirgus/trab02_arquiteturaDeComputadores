@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include <omp.h>
 
-#define MAX 10  // Número de elementos em cada bucket
+#define MAX 1000  // Número de elementos em cada bucket
 
 // Função para encontrar o valor máximo em um array
 float findMax(float array[], int n) {
     float max = array[0];
-    #pragma omp for num_threads(8) reduction(max: max)
+    #pragma omp parallel for num_threads(8) reduction(max: max)
     for (int i = 1; i < n; i++) {
         if (array[i] > max) {
             max = array[i];
@@ -33,7 +33,7 @@ void insertionSort(float bucket[], int n) {
 void bucketSort(float array[], int n) {
     // Encontrar o valor máximo no array
     float max = findMax(array, n);
-    printf("max = %d\n", max);
+    printf("max = %f\n", max);
 
     // Inicializar os buckets
     int bucketCount = MAX;
@@ -53,8 +53,11 @@ void bucketSort(float array[], int n) {
     }
 
     // Ordenar cada bucket individualmente
+    #pragma omp parallel for num_threads(8)
     for (int i = 0; i < bucketCount; i++) {
+        // int id = omp_get_thread_num();
         if (bucketSizes[i] > 0) {
+            // printf("ordering from thread %d\n", id);
             insertionSort(buckets[i], bucketSizes[i]);
         }
     }
@@ -95,17 +98,20 @@ int readFile(const char *filename, float **array) {
 
 int main() {
     float *array = malloc(sizeof(float) * 1);
-    const char *filename = "dados.txt";  // Substitua pelo nome do seu arquivo
+    const char *filename = "in1k.txt";  // Substitua pelo nome do seu arquivo
 
     int n = readFile(filename, &array);
     if (n == -1) {
         return 1;
     }
 
-    printf("Array original: \n");
-    printArray(array, n);
+    // printf("Array original: \n");
+    // printArray(array, n);
 
+    double start = omp_get_wtime();
     bucketSort(array, n);
+    double end = omp_get_wtime();
+    printf("execution time = %lf\n", end - start);
 
     printf("Array ordenado: \n");
     printArray(array, n);

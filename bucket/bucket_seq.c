@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
-#define MAX 10  // Número de elementos em cada bucket
+#define MAX 1000  // Número de elementos em cada bucket
 
 // Função para encontrar o valor máximo em um array
 float findMax(float array[], int n) {
@@ -31,6 +32,8 @@ void insertionSort(float bucket[], int n) {
 void bucketSort(float array[], int n) {
     // Encontrar o valor máximo no array
     float max = findMax(array, n);
+    printf("max = %f\n", max);
+
 
     // Inicializar os buckets
     int bucketCount = MAX;
@@ -92,20 +95,26 @@ int readFile(const char *filename, float **array) {
 
 int main() {
     float *array = malloc(sizeof(float) * 1);
-    const char *filename = "dados.txt";  // Substitua pelo nome do seu arquivo
+    const char *filename = "in1k.txt";  // Substitua pelo nome do seu arquivo
 
     int n = readFile(filename, &array);
     if (n == -1) {
         return 1;
     }
 
-    printf("Array original: \n");
-    printArray(array, n);
+    // printf("Array original: \n");
+    // printArray(array, n);
 
+    clock_t start, end;
+    start = clock();
     bucketSort(array, n);
+    end = clock();
+
+    double time = ((double) (end - start)) / CLOCKS_PER_SEC;
+    printf("execution time = %lf\n", time);
 
     printf("Array ordenado: \n");
-    printArray(array, n);
+    // printArray(array, n);
 
     free(array);
     return 0;

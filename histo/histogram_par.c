@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 
         int results[255] = {0};
         double start_time_omp = omp_get_wtime();
-        #pragma omp parallel for num_threads(4) reduction(+:results)
+        #pragma omp parallel for num_threads(8) reduction(+:results)
         for (i = 0; i < inputValue; i++){
             results[hist[i]]++;
         }
