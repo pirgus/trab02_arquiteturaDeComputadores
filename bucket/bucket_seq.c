@@ -32,17 +32,21 @@ void insertionSort(float bucket[], int n) {
 void bucketSort(float array[], int n) {
     // Encontrar o valor máximo no array
     float max = findMax(array, n);
-    printf("max = %f\n", max);
-
 
     // Inicializar os buckets
     int bucketCount = MAX;
-    float buckets[bucketCount][n];
-    int bucketSizes[bucketCount];
+    float **buckets = (float**) malloc(sizeof(float*) * bucketCount);
+    // float buckets[bucketCount][n];
+    // int bucketSizes[bucketCount];
+    int *bucketSizes = (int*) calloc(bucketCount, sizeof(int));
 
     // Inicializar os tamanhos dos buckets
-    for (int i = 0; i < bucketCount; i++) {
-        bucketSizes[i] = 0;
+    // for (int i = 0; i < bucketCount; i++) {
+    //     bucketSizes[i] = 0;
+    // }
+
+    for(int i = 0; i < bucketCount; i++){
+        buckets[i] = (float*) malloc(sizeof(float) * n);
     }
 
     // Distribuir os elementos nos buckets
@@ -66,6 +70,12 @@ void bucketSort(float array[], int n) {
             array[index++] = buckets[i][j];
         }
     }
+
+    for(int i = 0; i < bucketCount; i ++){
+        free(buckets[i]);
+    }
+    free(buckets);
+    free(bucketSizes);
 }
 
 // Função para imprimir o array
@@ -93,9 +103,9 @@ int readFile(const char *filename, float **array) {
     return n;
 }
 
-int main() {
+int main(int argc, char* argv[]) {
     float *array = malloc(sizeof(float) * 1);
-    const char *filename = "in10k.txt";  // Substitua pelo nome do seu arquivo
+    const char *filename = argv[1];  // Substitua pelo nome do seu arquivo
 
     int n = readFile(filename, &array);
     if (n == -1) {
