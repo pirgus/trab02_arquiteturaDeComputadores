@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     }
 
     
-    for(int k = 0; k < 10; k++){
+    // for(int k = 0; k < 10; k++){
 
         int results[255] = {0};
         double start_time_omp = omp_get_wtime();
@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
         double end_time_omp = omp_get_wtime();
         double cpu_time_used = ((double) (end_time_omp - start_time_omp));
         printf("Execution time: %g seconds\n", cpu_time_used);
-    }
+    // }
     
     // printHistogram(results, 255);
 

@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
    }
 
 
-   for(int k = 0; k < 10; k++){
+   // for(int k = 0; k < 10; k++){
       int results[255] = {0};
    
       clock_t start_time = clock();
@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
       clock_t end_time = clock();
       double cpu_time_used = ((double)(end_time - start_time)) / CLOCKS_PER_SEC;
       printf("Execution time: %g seconds\n", cpu_time_used);
-   }
+   // }
 
    // printHistogram(results, 255);
    fclose(inputFile);
