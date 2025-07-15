@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <omp.h>
 
 int gcd(int u, int v) {
 	if (v == 0)
@@ -19,7 +20,10 @@ void friendly_numbers(long int start, long int end) {
 	den = (long int*) malloc(sizeof(long int) * last);
 
 	long int i, j, factor, ii, sum, done, n;
+	
+	double start_time_omp = omp_get_wtime();
 
+	#pragma acc parallel loop copyin(start, end) copyout(the_num[0:last], num[0:last], den[0:last])
 	for (i = start; i <= end; i++) {
 		ii = i - start;
 		sum = 1 + i;
@@ -40,13 +44,17 @@ void friendly_numbers(long int start, long int end) {
 		num[ii] /= n;
 		den[ii] /= n;
 	} // end for
+	
+	double end_time_omp = omp_get_wtime();
+        double cpu_time_used = ((double) (end_time_omp - start_time_omp));
+        printf("Execution time: %g seconds\n", cpu_time_used);
 
-	for (i = 0; i < last; i++) {
-		for (j = i + 1; j < last; j++) {
-			if ((num[i] == num[j]) && (den[i] == den[j]))
-				printf("%ld and %ld are FRIENDLY\n", the_num[i], the_num[j]);
-		}
-	}
+	//for (i = 0; i < last; i++) {
+	//		for (j = i + 1; j < last; j++) {
+	//		if ((num[i] == num[j]) && (den[i] == den[j]))
+	//			printf("%ld and %ld are FRIENDLY\n", the_num[i], the_num[j]);
+	//	}
+	//}
 
 	free(the_num);
 	free(num);
@@ -61,7 +69,7 @@ int main(int argc, char **argv) {
 		scanf("%ld %ld", &start, &end);
 		if (start == 0 && end == 0)
 			break;
-		printf("Number %ld to %ld\n", start, end);
+		//printf("Number %ld to %ld\n", start, end);
 		friendly_numbers(start, end);
 	}
 

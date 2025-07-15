@@ -8,7 +8,7 @@
 // Função para encontrar o valor máximo em um array
 float findMax(float array[], int n) {
     float max = array[0];
-    #pragma omp parallel for num_threads(4) reduction(max: max)
+    #pragma omp parallel for num_threads(8) reduction(max: max)
     for (int i = 1; i < n; i++) {
         if (array[i] > max) {
             max = array[i];
@@ -63,7 +63,7 @@ void bucketSort(float array[], int n) {
     }
 
     // Ordenar cada bucket individualmente
-    #pragma omp parallel for num_threads(4)
+    #pragma omp parallel for num_threads(8)
     for (int i = 0; i < bucketCount; i++) {
         // int id = omp_get_thread_num();
         if (bucketSizes[i] > 0) {

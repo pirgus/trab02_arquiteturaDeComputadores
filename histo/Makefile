@@ -1,19 +1,23 @@
-FLAGS=-fopenmp
+# Nome dos executáveis
+PAR_EXEC = histogram_par.x
+SEQ_EXEC = histogram_seq.x
 
-CC=gcc
+# Compilador C
+CC = gcc
 
-RM=rm -f
+# Flags de compilação
+CFLAGS_PAR = -Wall -fopenmp
+CFLAGS_SEQ = -Wall
 
-EXEC=histogram_sequence_par
+.PHONY: all clean
 
-all: $(EXEC)
+all: $(PAR_EXEC) $(SEQ_EXEC)
 
-$(EXEC):
-	$(CC) $(FLAGS) $(EXEC).c -c -o $(EXEC).o
-	$(CC) $(FLAGS) $(EXEC).o -o $(EXEC)
+$(PAR_EXEC): histogram_par.c
+	$(CC) $(CFLAGS_PAR) histogram_par.c -o $(PAR_EXEC)
 
-run:
-	./$(EXEC)
+$(SEQ_EXEC): histogram_seq.c
+	$(CC) $(CFLAGS_SEQ) histogram_seq.c -o $(SEQ_EXEC)
 
 clean:
-	$(RM) $(EXEC).o $(EXEC)
+	rm -f $(PAR_EXEC) $(SEQ_EXEC)

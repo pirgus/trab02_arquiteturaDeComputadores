@@ -7,7 +7,7 @@ void printHistogram(int *hist, int n);
 
 int main(int argc, char *argv[])
 { /* histogram_seq.c   */
-    long int i, j;
+    long int i;
     long int inputValue;
 
     inputValue = atoi(argv[1]);
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 
 void printHistogram(int *hist, int n)
 {
-    int i, j;
+    int i;
     for (i = 0; i < n; i++){
         printf("[%d] - [%d]\n", i, hist[i]);
     }
